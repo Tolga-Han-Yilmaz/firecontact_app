@@ -4,11 +4,8 @@ import {
   Button,
   Box,
   MenuItem,
-  Grid,
   Container,
   Select,
-  FormGroup,
-  FormControl,
   Typography,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -48,7 +45,7 @@ const ContactInput = () => {
       </Typography>
       <Container align="center">
         <form onSubmit={handleSubmitAdd}>
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <Box sx={{ display: "flex", alignItems: "flex-end", width: "100%" }}>
             <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
               id="name"
@@ -56,6 +53,7 @@ const ContactInput = () => {
               variant="standard"
               value={contact.name}
               onChange={(e) => handleChange(e)}
+              sx={{ width: "100%" }}
             />
           </Box>
           <Box sx={{ display: "flex", alignItems: "flex-end", mt: 3, mb: 3 }}>
@@ -67,15 +65,17 @@ const ContactInput = () => {
               value={contact.phone}
               variant="standard"
               onChange={(e) => handleChange(e)}
+              sx={{ width: "100%" }}
             />
           </Box>
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <Box sx={{ display: "flex", alignItems: "flex-end", mt: 3 }}>
             <Select
               labelId="demo-simple-select-label"
               id="gender"
               value={contact.gender}
               label="gender"
               onChange={(e) => handleChange(e)}
+              sx={{ width: "100%" }}
             >
               <MenuItem value="male">Male</MenuItem>
               <MenuItem value="female">Female</MenuItem>
