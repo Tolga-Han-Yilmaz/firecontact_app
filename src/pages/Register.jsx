@@ -1,47 +1,79 @@
-import React from "react";
-import { Container, FormControl, TextField, Button } from "@mui/material";
+import { useState } from "react";
+import { register } from "../firebase/firebase";
+import { Container, TextField, Button, ImageListItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  return (
-    <Container maxWidth="sm" sx={{ border: "1px solid red", mt: 10 }}>
-      <FormControl>
-        <TextField
-          margin="normal"
-          id="name"
-          label="name"
-          type="text"
-          placeholder="Enter your Name"
-          fullWidth
-        />
-        <TextField
-          margin="normal"
-          id="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your Email"
-          fullWidth
-        />
-        <TextField
-          margin="normal"
-          id="email"
-          label="Email"
-          type="email"
-          placeholder="Enter your Email"
-          fullWidth
-        />
+  const navigate = useNavigate();
 
-        <TextField
-          margin="normal"
-          id="password"
-          label="Password"
-          type="password"
-          placeholder="Enter your Password"
-          fullWidth
-        />
-        <Button type="submit" variant="contained" sx={{ mt: 3 }}>
-          Register
-        </Button>
-      </FormControl>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await register(email, password, navigate);
+  };
+  return (
+    <Container sx={{ display: "flex", height: "88vh" }}>
+      <Container maxWidth="sm" sx={{ display: { xs: "none", md: "flex" } }}>
+        <ImageListItem>
+          <img src="https://picsum.photos/1600/900" alt="picture" key={4} />
+        </ImageListItem>
+      </Container>
+      <Container maxWidth="md" sx={{ mt: 5 }}>
+        <form sx={{ width: { xs: "60%", md: "80%" } }} onSubmit={handleSubmit}>
+          <TextField
+            margin="normal"
+            id="name"
+            label="name"
+            type="text"
+            placeholder="Enter your Name"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            id="text"
+            label="avatar"
+            type="avatar"
+            placeholder="Enter your Email"
+            fullWidth
+            value={avatar}
+            onChange={(e) => setAvatar(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            id="email"
+            label="Email"
+            type="email"
+            placeholder="Enter your Email"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <TextField
+            margin="normal"
+            id="password"
+            label="Password"
+            type="password"
+            placeholder="Enter your Password"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button
+            disabled={!name || !password || !email}
+            type="submit"
+            variant="contained"
+            sx={{ width: "100%", mt: 3 }}
+          >
+            Register
+          </Button>
+        </form>
+      </Container>
     </Container>
   );
 };

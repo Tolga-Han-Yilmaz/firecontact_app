@@ -13,9 +13,28 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from "../firebase/firebase";
+import { LOGOUT } from "../redux/reducers/userDeducer";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+
+  const handleLogin = () => {
+    navigate("/login");
+  };
+  const handleRegister = () => {
+    navigate("/register");
+  };
+  const handleLogout = async () => {
+    await logout(navigate);
+    console.log(user);
+    dispatch(LOGOUT());
+  };
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -32,12 +51,6 @@ const Navbar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-  };
-  const handleLogin = () => {
-    navigate("/login");
-  };
-  const handleRegister = () => {
-    navigate("/register");
   };
 
   return (
@@ -92,16 +105,26 @@ const Navbar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" onClick={handleLogin}>
-                  Login
-                </Typography>
-              </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center" onClick={handleRegister}>
-                  Register
-                </Typography>
-              </MenuItem>
+              {user ? (
+                <Menu>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center" onClick={handleLogin}>
+                      Login
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center" onClick={handleRegister}>
+                      Register
+                    </Typography>
+                  </MenuItem>
+                </Menu>
+              ) : (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" onClick={handleLogout}>
+                    Logout
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <HomeIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -123,20 +146,29 @@ const Navbar = () => {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          {user ? (
+            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              <Button
+                onClick={handleLogin}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Login
+              </Button>
+              <Button
+                onClick={handleRegister}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Register
+              </Button>
+            </Box>
+          ) : (
             <Button
-              onClick={handleLogin}
+              onClick={handleLogout}
               sx={{ my: 2, color: "white", display: "block" }}
             >
-              Login
+              Logout
             </Button>
-            <Button
-              onClick={handleRegister}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              Register
-            </Button>
-          </Box>
+          )}
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
