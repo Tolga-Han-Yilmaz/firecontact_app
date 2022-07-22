@@ -3,18 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   contacts: [],
 };
-const contactReducer = createSlice({
+const contacts = createSlice({
   name: "contacts",
   initialState,
   reducers: {
-    setContacts: (state, action) => {
+    SETCONTACT: (state, action) => {
       state.contacts = action.payload;
     },
-    appendTodo: (state, action) => {
+    APPENDCONTACT: (state, action) => {
       state.contacts = [...state.contacts, action.payload];
     },
   },
 });
 
-export const { setTodos, appendTodo } = contactReducer.actions;
-export default contactReducer.reducer;
+export const { SETCONTACT, APPENDCONTACT } = contacts.actions;
+export default contacts.reducer;

@@ -20,7 +20,8 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import store from "../redux";
-import { LOGOUT } from "../redux/reducers/userDeducer";
+import userReducer, { LOGOUT, LOGIN } from "../redux/reducers/userReducer";
+import { SETCONTACT } from "../redux/reducers/contactReducer";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -87,7 +88,26 @@ export const logout = async (navigate) => {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    store.dispatch(LOGOUT(user));
+    store.dispatch(LOGIN(user));
+    onSnapshot(
+      query(
+        collection(db, "contacts"),
+        where("uid", "==", userReducer.currentUser.uid)
+      ),
+      (doc) => {
+        store.dispatch(
+          SETCONTACT(
+            doc.docs.reduce(
+              (contacts, contact) => [
+                ...contacts,
+                { ...contact.data(), id: contact.id },
+              ],
+              []
+            )
+          )
+        );
+      }
+    );
   } else {
     store.dispatch(LOGOUT());
   }
@@ -95,7 +115,9 @@ onAuthStateChanged(auth, (user) => {
 
 export const addTodo = async (data) => {
   try {
-    const result = await addDoc(collection(db, "todos"), data);
+    const result = await addDoc(collection(db, "contacts"), data);
+    console.log(result);
+
     return result.id;
   } catch (error) {
     console.log(error);

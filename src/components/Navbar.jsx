@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../firebase/firebase";
-import { LOGOUT } from "../redux/reducers/userDeducer";
+import { LOGOUT } from "../redux/reducers/userReducer";
 
 const Navbar = () => {
   const dispatch = useDispatch();

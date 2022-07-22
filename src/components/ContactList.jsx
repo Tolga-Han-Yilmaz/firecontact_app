@@ -6,8 +6,13 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useSelector } from "react-redux";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
 
-export default function StickyHeadTable() {
+const ContactList = () => {
+  const { contacts } = useSelector((state) => state.contacts);
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -52,14 +57,40 @@ export default function StickyHeadTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow hover role="checkbox" tabIndex={-1}>
-              <TableCell
-              // key={column.id} align={column.align}
-              ></TableCell>
-            </TableRow>
+            {contacts.map((contact) => {
+              <TableRow hover tabIndex={-1} key={contact.id}>
+                <TableCell
+                // key={column.id} align={column.align}
+                >
+                  {contact.name}
+                </TableCell>
+                <TableCell
+                // key={column.id} align={column.align}
+                >
+                  {contact.phone}
+                </TableCell>
+                <TableCell
+                // key={column.id} align={column.align}
+                >
+                  {contact.gender}
+                </TableCell>
+                <TableCell
+                // key={column.id} align={column.align}
+                >
+                  <DeleteForeverIcon />
+                </TableCell>
+
+                <TableCell
+                // key={column.id} align={column.align}
+                >
+                  <EditIcon />{" "}
+                </TableCell>
+              </TableRow>;
+            })}
           </TableBody>
         </Table>
       </TableContainer>
     </Paper>
   );
-}
+};
+export default ContactList;

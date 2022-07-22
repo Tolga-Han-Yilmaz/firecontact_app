@@ -1,16 +1,16 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import TodoInput from "./TodoInput";
-import TodoList from "./TodoList";
+import ContactInput from "./ContactInput";
+import ContactList from "./ContactList";
 
 const Main = () => {
   return (
     <Grid container>
       <Grid item md={6} xs={12}>
-        <TodoInput />
+        <ContactInput />
       </Grid>
       <Grid item md={6} xs={12}>
-        <TodoList />
+        <ContactList />
       </Grid>
     </Grid>
   );
