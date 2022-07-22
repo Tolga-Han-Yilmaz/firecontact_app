@@ -18,10 +18,12 @@ import {
   query,
   where,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import store from "../redux";
-import userReducer, { LOGOUT, LOGIN } from "../redux/reducers/userReducer";
-import { SETCONTACT } from "../redux/reducers/contactReducer";
+import { LOGOUT, LOGIN } from "../redux/reducers/user";
+import { SETCONTACT } from "../redux/reducers/contacts";
+import { success } from "../helper/Toasts";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -38,7 +40,7 @@ export const auth = getAuth();
 export const db = getFirestore(app);
 
 // register
-export const register = async (email, password, navigate) => {
+export const register = async (email, password, navigate, wrong, success) => {
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,
@@ -46,42 +48,46 @@ export const register = async (email, password, navigate) => {
       password
     );
     navigate("/");
+    success("Registration Successful");
     return user;
   } catch (error) {
     console.log(error);
     navigate("/register");
+    wrong(error.mesage);
   }
 };
 
 // login
-export const login = async (email, password, navigate) => {
+export const login = async (email, password, navigate, wrong, success) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
     navigate("/");
-
+    success("Login successful");
     return user;
   } catch (error) {
-    console(error.mesage);
+    wrong(error.mesage);
     navigate("/login");
   }
 };
 
 // google login
 const provider = new GoogleAuthProvider();
-export const googleLogin = (navigate) => {
+export const googleLogin = (navigate, wrong, success) => {
   signInWithPopup(auth, provider)
     .then((result) => {
+      success("Login successful");
       navigate("/");
     })
     .catch((error) => {
-      console.log(error);
+      wrong(error.mesage);
     });
 };
 
 // logout
-export const logout = async (navigate) => {
+export const logout = async (navigate, success) => {
   await signOut(auth);
   navigate("/login");
+  success("exit successful");
   console.log(logout);
   return true;
 };
@@ -92,7 +98,7 @@ onAuthStateChanged(auth, (user) => {
     onSnapshot(
       query(
         collection(db, "contacts"),
-        where("uid", "==", userReducer.currentUser.uid)
+        where("uid", "==", auth.currentUser.uid)
       ),
       (doc) => {
         store.dispatch(
@@ -113,15 +119,19 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-export const addTodo = async (data) => {
+export const addTodo = async (data, success, wrong) => {
   try {
     const result = await addDoc(collection(db, "contacts"), data);
-    console.log(result);
-
+    success("add successful");
     return result.id;
   } catch (error) {
-    console.log(error);
+    wrong(error.message);
   }
+};
+
+export const deleteTodo = async (id, success) => {
+  success("delete successful");
+  return await deleteDoc(doc(db, "contacts", id));
 };
 
 export default app;

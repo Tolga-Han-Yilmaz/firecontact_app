@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { googleLogin, login } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-
+import { wrong, success } from "../helper/Toasts";
 import { Container, TextField, Button, ImageListItem } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 
@@ -11,11 +11,11 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(email, password, navigate);
+    await login(email, password, navigate, wrong, success);
   };
 
   const handleGoogle = async () => {
-    await googleLogin(navigate);
+    await googleLogin(navigate, wrong, success);
   };
 
   return (

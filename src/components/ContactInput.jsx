@@ -7,9 +7,14 @@ import {
   Grid,
   Container,
   Select,
+  FormGroup,
+  FormControl,
+  Typography,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { addTodo } from "../firebase/firebase";
+import { useSelector } from "react-redux";
+import { wrong, success } from "../helper/Toasts";
 
 const ContactInput = () => {
   const [contact, setContact] = useState({
@@ -23,16 +28,26 @@ const ContactInput = () => {
   };
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
-    await addTodo({
-      contact,
-    });
+    await addTodo(
+      {
+        contact,
+        uid: user.uid,
+      },
+      wrong,
+      success
+    );
     console.log(contact);
   };
 
+  const { user } = useSelector((state) => state.user);
+
   return (
     <Container>
-      <Grid container>
-        <form sx={{ mx: "auto" }} onSubmit={handleSubmitAdd}>
+      <Typography variant="h5" align="center" mt={4}>
+        Add Contacts
+      </Typography>
+      <Container align="center">
+        <form onSubmit={handleSubmitAdd}>
           <Box sx={{ display: "flex", alignItems: "flex-end" }}>
             <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
             <TextField
@@ -73,10 +88,10 @@ const ContactInput = () => {
             variant="contained"
             sx={{ width: "100%", mt: 3 }}
           >
-            Register
+            Add
           </Button>
         </form>
-      </Grid>
+      </Container>
     </Container>
   );
 };

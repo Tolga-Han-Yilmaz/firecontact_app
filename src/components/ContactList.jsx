@@ -9,86 +9,59 @@ import TableRow from "@mui/material/TableRow";
 import { useSelector } from "react-redux";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
+import { deleteTodo } from "../firebase/firebase";
+import { Typography } from "@mui/material";
+import { success } from "../helper/Toasts";
 
 const ContactList = () => {
   const { contacts } = useSelector((state) => state.contacts);
+  const handleDelete = async (id) => {
+    await deleteTodo(id, success);
+  };
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", mt: 6 }}>
+      <Typography variant="h5" align="center" mt={4}>
+        Contacts
+      </Typography>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell
-              //   key={column.id}
-              //   align={column.align}
-              //   style={{ minWidth: column.minWidth }}
-              >
-                UserName
-              </TableCell>
-              <TableCell
-              //   key={column.id}
-              //   align={column.align}
-              //   style={{ minWidth: column.minWidth }}
-              >
-                Phone Number
-              </TableCell>
-              <TableCell
-              //   key={column.id}
-              //   align={column.align}
-              //   style={{ minWidth: column.minWidth }}
-              >
-                Gender
-              </TableCell>
-              <TableCell
-              //   key={column.id}
-              //   align={column.align}
-              //   style={{ minWidth: column.minWidth }}
-              >
-                Delete
-              </TableCell>
-              <TableCell
-              //   key={column.id}
-              //   align={column.align}
-              //   style={{ minWidth: column.minWidth }}
-              >
-                Edit
-              </TableCell>
+              <TableCell>UserName</TableCell>
+              <TableCell>Phone Number</TableCell>
+              <TableCell>Gender</TableCell>
+              <TableCell>Delete</TableCell>
+              <TableCell>Edit</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {contacts.map((contact) => {
-              <TableRow hover tabIndex={-1} key={contact.id}>
-                <TableCell
-                // key={column.id} align={column.align}
-                >
-                  {contact.name}
-                </TableCell>
-                <TableCell
-                // key={column.id} align={column.align}
-                >
-                  {contact.phone}
-                </TableCell>
-                <TableCell
-                // key={column.id} align={column.align}
-                >
-                  {contact.gender}
-                </TableCell>
-                <TableCell
-                // key={column.id} align={column.align}
-                >
-                  <DeleteForeverIcon />
-                </TableCell>
+              return (
+                <TableRow hover tabIndex={-1} key={contact.contact.id}>
+                  <TableCell>{contact.contact.name}</TableCell>
+                  <TableCell>{contact.contact.phone}</TableCell>
+                  <TableCell>{contact.contact.gender}</TableCell>
+                  <TableCell>
+                    <DeleteForeverIcon
+                      onClick={() => handleDelete(contact.id)}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  </TableCell>
 
-                <TableCell
-                // key={column.id} align={column.align}
-                >
-                  <EditIcon />{" "}
-                </TableCell>
-              </TableRow>;
+                  <TableCell>
+                    <EditIcon />{" "}
+                  </TableCell>
+                </TableRow>
+              );
             })}
           </TableBody>
         </Table>
+        {contacts.length === 0 && (
+          <Typography variant="h5" align="center" mt={4}>
+            Nothing Found
+          </Typography>
+        )}
       </TableContainer>
     </Paper>
   );

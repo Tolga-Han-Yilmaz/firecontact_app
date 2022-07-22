@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { register } from "../firebase/firebase";
-import { Container, TextField, Button, ImageListItem } from "@mui/material";
+import {
+  Container,
+  TextField,
+  Button,
+  ImageListItem,
+  Avatar,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { wrong, success } from "../helper/Toasts";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -12,13 +19,13 @@ const Register = () => {
   const [avatar, setAvatar] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await register(email, password, navigate);
+    await register(email, password, navigate, wrong, success);
   };
   return (
     <Container sx={{ display: "flex", height: "88vh" }}>
       <Container maxWidth="sm" sx={{ display: { xs: "none", md: "flex" } }}>
         <ImageListItem>
-          <img src="https://picsum.photos/1600/900" alt="picture" key={4} />
+          <Avatar src="https://picsum.photos/1600/900" alt="picture" key={4} />
         </ImageListItem>
       </Container>
       <Container maxWidth="md" sx={{ mt: 5 }}>

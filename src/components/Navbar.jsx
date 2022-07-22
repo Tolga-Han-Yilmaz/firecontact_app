@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../firebase/firebase";
-import { LOGOUT } from "../redux/reducers/userReducer";
+import { LOGOUT } from "../redux/reducers/user";
+import { wrong, success } from "../helper/Toasts";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -25,15 +26,17 @@ const Navbar = () => {
 
   const handleLogin = () => {
     navigate("/login");
+    console.log(user);
   };
   const handleRegister = () => {
     navigate("/register");
   };
   const handleLogout = async () => {
-    await logout(navigate);
+    await logout(navigate, success);
     console.log(user);
     dispatch(LOGOUT());
   };
+  console.log(user);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -57,26 +60,21 @@ const Navbar = () => {
     <AppBar position="static" color="secondary">
       <Container maxWidth="lg">
         <Toolbar disableGutters>
-          <HomeIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
+          <HomeIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            onClick={() => navigate("/")}
+          />
+
+          <Box
             sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+              flexGrow: 1,
+              display: {
+                xs: "flex",
+                justifyContent: "space-between",
+                md: "none",
+              },
             }}
           >
-            HOME
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -87,65 +85,68 @@ const Navbar = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {user ? (
-                <Menu>
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center" onClick={handleLogin}>
-                      Login
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center" onClick={handleRegister}>
-                      Register
-                    </Typography>
-                  </MenuItem>
-                </Menu>
-              ) : (
+            {user ? (
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" onClick={handleLogin}>
+                    Login
+                  </Typography>
+                </MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" onClick={handleRegister}>
+                    Register
+                  </Typography>
+                </MenuItem>
+              </Menu>
+            ) : (
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
+              >
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center" onClick={handleLogout}>
                     Logout
                   </Typography>
                 </MenuItem>
-              )}
-            </Menu>
+                <Typography textAlign="center">
+                  {user.displayName === null ? "Jond Doe" : user.displayName}
+                </Typography>
+              </Menu>
+            )}
           </Box>
           <HomeIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
+
           {user ? (
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               <Button
@@ -162,41 +163,20 @@ const Navbar = () => {
               </Button>
             </Box>
           ) : (
-            <Button
-              onClick={handleLogout}
-              sx={{ my: 2, color: "white", display: "block" }}
-            >
-              Logout
-            </Button>
+            <Box sx={{ flexGrow: 0 }}>
+              <Typography textAlign="center" onClick={handleLogout}>
+                Logout
+              </Typography>
+              <Typography textAlign="center">
+                {user.displayName === null ? "Jond Doe" : user.displayName}
+              </Typography>
+              <Tooltip>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+            </Box>
           )}
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center"></Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>
