@@ -128,14 +128,14 @@ export const addTodo = async (data, success, wrong) => {
   }
 };
 
-export const updateTodo = async (data, success, wrong) => {
+export const updateTodo = async (data) => {
   try {
     const washingtonRef = doc(db, "contacts", data);
     await updateDoc(washingtonRef, {
       capital: true,
     });
   } catch (error) {
-    wrong(error.message);
+    console.log(error.message);
   }
 };
 

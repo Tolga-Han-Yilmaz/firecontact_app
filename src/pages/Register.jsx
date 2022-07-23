@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { register } from "../firebase/firebase";
-import {
-  Container,
-  TextField,
-  Button,
-  ImageListItem,
-  Avatar,
-} from "@mui/material";
+import { Container, TextField, Button, ImageListItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { wrong, success } from "../helper/Toasts";
 
@@ -16,7 +10,6 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     await register(email, password, navigate, wrong, success);
@@ -40,16 +33,7 @@ const Register = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <TextField
-            margin="normal"
-            id="text"
-            label="avatar"
-            type="avatar"
-            placeholder="Enter your Email"
-            fullWidth
-            value={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-          />
+
           <TextField
             margin="normal"
             id="email"
