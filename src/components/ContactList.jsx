@@ -10,9 +10,20 @@ import { useSelector, useDispatch } from "react-redux";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import { deleteTodo } from "../firebase/firebase";
-import { Typography } from "@mui/material";
+import {
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogActions,
+} from "@mui/material";
 import { success } from "../helper/Toasts";
-import { updatesContacts, appendUpdates } from "../redux/reducers/update";
+import { updatesContacts } from "../redux/reducers/update";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 const ContactList = () => {
   const { contacts } = useSelector((state) => state.contacts);
@@ -25,11 +36,14 @@ const ContactList = () => {
     const test = contacts.filter((contact) => contact.id === id);
     dispatch(updatesContacts(test));
     // dispatch(appendUpdates(test));
+    setOpen(true);
     console.log(test);
     console.log(contacts[0].id);
     console.log(id);
   };
+  const [open, setOpen] = React.useState(false);
 
+  const handleClose = () => setOpen(false);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", mt: 6 }}>
       <Typography variant="h5" align="center" mt={4}>
@@ -65,6 +79,84 @@ const ContactList = () => {
                       onClick={() => handleEdit(contact.id)}
                       sx={{ cursor: "pointer" }}
                     />
+                    <Dialog open={open} onClose={handleClose}>
+                      <form
+                      // onSubmit={handleSubmitAdd}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-end",
+                            width: "100%",
+                          }}
+                        >
+                          <AccountCircle
+                            sx={{ color: "action.active", mr: 1, my: 0.5 }}
+                          />
+                          <TextField
+                            id="name"
+                            label="name"
+                            variant="standard"
+                            value={contact.name}
+                            // onChange={(e) => handleChange(e)}
+                            sx={{ width: "100%" }}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-end",
+                            mt: 3,
+                            mb: 3,
+                          }}
+                        >
+                          <AccountCircle
+                            sx={{ color: "action.active", mr: 1, my: 0.5 }}
+                          />
+                          <TextField
+                            type="number"
+                            id="phone"
+                            label="phone"
+                            value={contact.phone}
+                            variant="standard"
+                            // onChange={(e) => handleChange(e)}
+                            sx={{ width: "100%" }}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-end",
+                            mt: 3,
+                          }}
+                        >
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="gender"
+                            value={contact.gender}
+                            label="gender"
+                            // onChange={(e) => handleChange(e)}
+                            sx={{ width: "100%" }}
+                          >
+                            <MenuItem value="male">Male</MenuItem>
+                            <MenuItem value="female">Female</MenuItem>
+                          </Select>
+                        </Box>
+
+                        <Button
+                          disabled={!contact.name || !contact.phone}
+                          type="submit"
+                          variant="contained"
+                          sx={{ width: "100%", mt: 3 }}
+                        >
+                          Add
+                        </Button>
+                      </form>
+                      <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>Subscribe</Button>
+                      </DialogActions>
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               );
