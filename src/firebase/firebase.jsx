@@ -21,9 +21,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import store from "../redux";
-import { LOGOUT, LOGIN } from "../redux/reducers/user";
-import { SETCONTACT } from "../redux/reducers/contacts";
-import { success } from "../helper/Toasts";
+import { setLogin, setLogout } from "../redux/reducers/auth";
+import { setContacts } from "../redux/reducers/contacts";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -94,7 +93,7 @@ export const logout = async (navigate, success) => {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    store.dispatch(LOGIN(user));
+    store.dispatch(setLogin(user));
     onSnapshot(
       query(
         collection(db, "contacts"),
@@ -102,7 +101,7 @@ onAuthStateChanged(auth, (user) => {
       ),
       (doc) => {
         store.dispatch(
-          SETCONTACT(
+          setContacts(
             doc.docs.reduce(
               (contacts, contact) => [
                 ...contacts,
@@ -115,7 +114,7 @@ onAuthStateChanged(auth, (user) => {
       }
     );
   } else {
-    store.dispatch(LOGOUT());
+    store.dispatch(setLogout());
   }
 });
 
@@ -124,6 +123,17 @@ export const addTodo = async (data, success, wrong) => {
     const result = await addDoc(collection(db, "contacts"), data);
     success("add successful");
     return result.id;
+  } catch (error) {
+    wrong(error.message);
+  }
+};
+
+export const updateTodo = async (data, success, wrong) => {
+  try {
+    const washingtonRef = doc(db, "contacts", data);
+    await updateDoc(washingtonRef, {
+      capital: true,
+    });
   } catch (error) {
     wrong(error.message);
   }

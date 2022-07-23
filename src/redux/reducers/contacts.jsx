@@ -7,7 +7,7 @@ const contacts = createSlice({
   name: "contacts",
   initialState,
   reducers: {
-    SETCONTACT: (state, action) => {
+    setContacts: (state, action) => {
       state.contacts = action.payload;
     },
     APPENDCONTACT: (state, action) => {
@@ -16,5 +16,5 @@ const contacts = createSlice({
   },
 });
 
-export const { SETCONTACT, APPENDCONTACT } = contacts.actions;
+export const { setContacts, APPENDCONTACT } = contacts.actions;
 export default contacts.reducer;

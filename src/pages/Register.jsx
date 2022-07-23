@@ -25,7 +25,7 @@ const Register = () => {
     <Container sx={{ display: "flex", height: "88vh" }}>
       <Container maxWidth="sm" sx={{ display: { xs: "none", md: "flex" } }}>
         <ImageListItem>
-          <Avatar src="https://picsum.photos/1600/900" alt="picture" key={4} />
+          <img src="https://picsum.photos/1600/900" alt="picture" key={4} />
         </ImageListItem>
       </Container>
       <Container maxWidth="md" sx={{ mt: 5 }}>

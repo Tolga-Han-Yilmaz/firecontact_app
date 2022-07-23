@@ -9,11 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { addTodo } from "../firebase/firebase";
-import { useSelector } from "react-redux";
+import { addTodo, updateTodo } from "../firebase/firebase";
+import { useSelector, useDispatch } from "react-redux";
 import { wrong, success } from "../helper/Toasts";
 
 const ContactInput = () => {
+  const { updates } = useSelector((state) => state.updates);
+  console.log(updates);
   const [contact, setContact] = useState({
     name: "",
     phone: "",
@@ -30,13 +32,14 @@ const ContactInput = () => {
         contact,
         uid: user.uid,
       },
-      wrong,
-      success
+      success,
+      wrong
     );
-    console.log(contact);
+    setContact({ name: "", phone: "", gender: "male" });
   };
 
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
+  console.log(user);
 
   return (
     <Container>
@@ -83,7 +86,7 @@ const ContactInput = () => {
           </Box>
 
           <Button
-            //   disabled={!name || !password || !email}
+            disabled={!contact.name || !contact.phone}
             type="submit"
             variant="contained"
             sx={{ width: "100%", mt: 3 }}

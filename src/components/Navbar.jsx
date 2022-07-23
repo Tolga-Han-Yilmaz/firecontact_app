@@ -16,13 +16,14 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logout } from "../firebase/firebase";
-import { LOGOUT } from "../redux/reducers/user";
-import { wrong, success } from "../helper/Toasts";
+import { setLogout } from "../redux/reducers/auth";
+import { success } from "../helper/Toasts";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
+  console.log(user);
 
   const handleLogin = () => {
     navigate("/login");
@@ -34,7 +35,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     await logout(navigate, success);
     console.log(user);
-    dispatch(LOGOUT());
+    dispatch(setLogout());
   };
   console.log(user);
 
@@ -64,7 +65,6 @@ const Navbar = () => {
             sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
             onClick={() => navigate("/")}
           />
-
           <Box
             sx={{
               flexGrow: 1,
@@ -85,98 +85,95 @@ const Navbar = () => {
             >
               <MenuIcon />
             </IconButton>
-            {user ? (
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" onClick={handleLogin}>
-                    Login
-                  </Typography>
-                </MenuItem>
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" onClick={handleRegister}>
-                    Register
-                  </Typography>
-                </MenuItem>
-              </Menu>
-            ) : (
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: "block", md: "none" },
-                }}
-              >
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" onClick={handleLogout}>
-                    Logout
-                  </Typography>
-                </MenuItem>
-                <Typography textAlign="center">
-                  {user.displayName === null ? "Jond Doe" : user.displayName}
-                </Typography>
-              </Menu>
-            )}
-          </Box>
-          <HomeIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
 
-          {user ? (
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              <Button
-                onClick={handleLogin}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Login
-              </Button>
-              <Button
-                onClick={handleRegister}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Register
-              </Button>
-            </Box>
-          ) : (
-            <Box sx={{ flexGrow: 0 }}>
-              <Typography textAlign="center" onClick={handleLogout}>
-                Logout
-              </Typography>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center" onClick={handleLogin}>
+                  Login
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center" onClick={handleRegister}>
+                  Register
+                </Typography>
+              </MenuItem>
+            </Menu>
+
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center" onClick={handleLogout}>
+                  Logout
+                </Typography>
+              </MenuItem>
               <Typography textAlign="center">
                 {user.displayName === null ? "Jond Doe" : user.displayName}
               </Typography>
-              <Tooltip>
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          )}
+            </Menu>
+          </Box>
+          <HomeIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Button
+              onClick={handleLogin}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Login
+            </Button>
+            <Button
+              onClick={handleRegister}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Register
+            </Button>
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Typography textAlign="center" onClick={handleLogout}>
+              Logout
+            </Typography>
+            <Typography textAlign="center">
+              {user.displayName === null ? "Jond Doe" : user.displayName}
+            </Typography>
+            <Tooltip>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

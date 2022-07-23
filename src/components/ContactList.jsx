@@ -6,17 +6,28 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import { deleteTodo } from "../firebase/firebase";
 import { Typography } from "@mui/material";
 import { success } from "../helper/Toasts";
+import { updatesContacts, appendUpdates } from "../redux/reducers/update";
 
 const ContactList = () => {
   const { contacts } = useSelector((state) => state.contacts);
+  const dispatch = useDispatch();
   const handleDelete = async (id) => {
     await deleteTodo(id, success);
+  };
+
+  const handleEdit = (id) => {
+    const test = contacts.filter((contact) => contact.id === id);
+    dispatch(updatesContacts(test));
+    // dispatch(appendUpdates(test));
+    console.log(test);
+    console.log(contacts[0].id);
+    console.log(id);
   };
 
   return (
@@ -50,7 +61,10 @@ const ContactList = () => {
                   </TableCell>
 
                   <TableCell>
-                    <EditIcon />{" "}
+                    <EditIcon
+                      onClick={() => handleEdit(contact.id)}
+                      sx={{ cursor: "pointer" }}
+                    />
                   </TableCell>
                 </TableRow>
               );
