@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
 import { googleLogin, login } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
@@ -5,7 +6,6 @@ import { wrong, success } from "../helper/Toasts";
 import { Container, TextField, Button, ImageListItem } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useDispatch } from "react-redux";
-import { setContacts } from "../redux/reducers/contacts";
 import { setLogin } from "../redux/reducers/auth";
 
 const Login = () => {
