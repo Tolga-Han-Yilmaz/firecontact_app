@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import { useState } from "react";
 import { register } from "../firebase/firebase";
 import { Container, TextField, Button, ImageListItem } from "@mui/material";
