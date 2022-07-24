@@ -37,13 +37,9 @@ const Navbar = () => {
   console.log(user);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -122,8 +118,7 @@ const Navbar = () => {
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
+                  display: { xs: "block", md: "none" },
                 }}
               >
                 <MenuItem onClick={handleCloseNavMenu}>

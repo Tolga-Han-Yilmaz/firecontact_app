@@ -7,7 +7,6 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-  updateProfile,
 } from "firebase/auth";
 import {
   getFirestore,
