@@ -9,21 +9,19 @@ import TableRow from "@mui/material/TableRow";
 import { useSelector, useDispatch } from "react-redux";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
-import { deleteTodo ,updateTodo} from "../firebase/firebase";
+import { deleteTodo, updateTodo } from "../firebase/firebase";
 import {
   Typography,
   TextField,
   Select,
   MenuItem,
   Dialog,
-  DialogActions,
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { success } from "../helper/Toasts";
+import { success, wrong } from "../helper/Toasts";
 import { updatesContacts } from "../redux/reducers/update";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
@@ -34,33 +32,30 @@ const ContactList = () => {
     await deleteTodo(id, success);
   };
   const [updateState, setUpdateState] = React.useState([]);
-  const [updateID,setUpdateID] = React.useState("");
+  const [updateID, setUpdateID] = React.useState("");
 
   const handleEdit = async (id) => {
     let dataForUpdate = await contacts.filter((contact) => contact.id === id);
     console.log(dataForUpdate);
     await setUpdateState(dataForUpdate[0].contact);
-    await setUpdateID(dataForUpdate[0].id)
+    await setUpdateID(dataForUpdate[0].id);
     await dispatch(updatesContacts(updateState));
-    // dispatch(appendUpdates(test));
     await setOpen(true);
-    // console.log(test);
-    // console.log(contacts[0].id);
-    // console.log(id);
   };
-  console.log(updateState);
-  console.log(updateID);
+
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => setOpen(false);
   const handleChange = (e) => {
-    setUpdateState({...updateState, [e.target.name] : e.target.value})
-  }
-  const handleUpdate = async(e) => {
+    setUpdateState({ ...updateState, [e.target.name]: e.target.value });
+  };
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    await updateTodo(updateState,updateID)
-    await setOpen(false)
-  }
+    await updateTodo(updateState, updateID, success, wrong);
+    await setOpen(false);
+  };
+  // const editId = Math.floor(Math.random() * 10000);
+  // console.log(editId);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", mt: 6 }}>
       <Typography variant="h5" align="center" mt={4}>
@@ -100,6 +95,7 @@ const ContactList = () => {
                       open={open}
                       onClose={handleClose}
                       sx={{ width: "100%" }}
+                      // key={}
                     >
                       <form
                       // onSubmit={handleSubmitAdd}
@@ -178,13 +174,9 @@ const ContactList = () => {
                           sx={{ width: "100%", mt: 3 }}
                           onClick={handleUpdate}
                         >
-                          Add
+                          Update
                         </Button>
                       </form>
-                      <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleClose}>Subscribe</Button>
-                      </DialogActions>
                     </Dialog>
                   </TableCell>
                 </TableRow>

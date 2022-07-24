@@ -11,13 +11,11 @@ import {
   FormControl,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { addTodo, updateTodo } from "../firebase/firebase";
-import { useSelector, useDispatch } from "react-redux";
+import { addTodo } from "../firebase/firebase";
+import { useSelector } from "react-redux";
 import { wrong, success } from "../helper/Toasts";
 
 const ContactInput = () => {
-  const { updates } = useSelector((state) => state.updates);
-  console.log(updates);
   const [contact, setContact] = useState({
     name: "",
     phone: "",
@@ -41,7 +39,6 @@ const ContactInput = () => {
   };
 
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
 
   return (
     <Container>
@@ -76,23 +73,22 @@ const ContactInput = () => {
             />
           </Box>
           <Box sx={{ minWidth: 120 }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={contact.gender}
-              label="gender"
-              name="gender"
-              onChange={(e) => handleChange(e)}
-              sx={{ width: "100%" }}
-            >
-              <MenuItem value="male">Male</MenuItem>
-              <MenuItem value="female">Female</MenuItem>
-            </Select>
-            </FormControl> 
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={contact.gender}
+                label="gender"
+                name="gender"
+                onChange={(e) => handleChange(e)}
+                sx={{ width: "100%" }}
+              >
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
-          
 
           <Button
             disabled={!contact.name || !contact.phone}

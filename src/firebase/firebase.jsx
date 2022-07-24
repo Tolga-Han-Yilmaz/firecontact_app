@@ -7,7 +7,6 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-  updateProfile,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -87,10 +86,10 @@ export const logout = async (navigate, success) => {
   await signOut(auth);
   navigate("/login");
   success("exit successful");
-  console.log(logout);
   return true;
 };
 
+// currentuser
 onAuthStateChanged(auth, (user) => {
   if (user) {
     store.dispatch(setLogin(user));
@@ -118,6 +117,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// add contacts
 export const addTodo = async (data, success, wrong) => {
   try {
     const result = await addDoc(collection(db, "contacts"), data);
@@ -128,7 +128,8 @@ export const addTodo = async (data, success, wrong) => {
   }
 };
 
-export const updateTodo = async (updateState, updateID) => {
+// update contacts
+export const updateTodo = async (updateState, updateID, success, wrong) => {
   try {
     const UpdateRef = doc(db, "contacts", updateID);
     await updateDoc(UpdateRef, {
@@ -138,11 +139,13 @@ export const updateTodo = async (updateState, updateID) => {
         gender: updateState.gender,
       },
     });
+    success("update successful");
   } catch (error) {
-    console.log(error.message);
+    wrong("update failed");
   }
 };
 
+// delete contacts
 export const deleteTodo = async (id, success) => {
   success("delete successful");
   return await deleteDoc(doc(db, "contacts", id));
