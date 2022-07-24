@@ -7,21 +7,25 @@ import {
   Container,
   Select,
   Typography,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { addTodo } from "../firebase/firebase";
-import { useSelector } from "react-redux";
+import { addTodo, updateTodo } from "../firebase/firebase";
+import { useSelector, useDispatch } from "react-redux";
 import { wrong, success } from "../helper/Toasts";
 
 const ContactInput = () => {
+  const { updates } = useSelector((state) => state.updates);
+  console.log(updates);
   const [contact, setContact] = useState({
     name: "",
     phone: "",
-    gender: "male",
+    gender: "",
   });
 
   const handleChange = (e) => {
-    setContact({ ...contact, [e.target.id]: e.target.value });
+    setContact({ ...contact, [e.target.name]: e.target.value });
   };
   const handleSubmitAdd = async (e) => {
     e.preventDefault();
@@ -33,10 +37,11 @@ const ContactInput = () => {
       success,
       wrong
     );
-    // setContact({ name: "", phone: "" });
+    setContact({ name: "", phone: "", gender: "" });
   };
 
   const { user } = useSelector((state) => state.auth);
+  console.log(user);
 
   return (
     <Container>
@@ -50,6 +55,7 @@ const ContactInput = () => {
             <TextField
               id="name"
               label="name"
+              name="name"
               variant="standard"
               value={contact.name}
               onChange={(e) => handleChange(e)}
@@ -62,25 +68,31 @@ const ContactInput = () => {
               type="number"
               id="phone"
               label="phone"
+              name="phone"
               value={contact.phone}
               variant="standard"
               onChange={(e) => handleChange(e)}
               sx={{ width: "100%" }}
             />
           </Box>
-          <Box sx={{ display: "flex", alignItems: "flex-end", mt: 3 }}>
+          <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
             <Select
               labelId="demo-simple-select-label"
-              id="gender"
+              id="demo-simple-select"
               value={contact.gender}
               label="gender"
+              name="gender"
               onChange={(e) => handleChange(e)}
               sx={{ width: "100%" }}
             >
               <MenuItem value="male">Male</MenuItem>
               <MenuItem value="female">Female</MenuItem>
             </Select>
+            </FormControl> 
           </Box>
+          
 
           <Button
             disabled={!contact.name || !contact.phone}
