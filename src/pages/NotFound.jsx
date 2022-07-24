@@ -1,21 +1,27 @@
-// import error from "../../assets/404.jpeg";
+import error from "../assets/404.jpeg";
 import { useNavigate } from "react-router-dom";
+import { Button, Container } from "@mui/material";
 
 const NotFound = () => {
   const navigate = useNavigate();
   return (
-    <div className="container text-center mt-4">
-      <img className="w-75" src="{error}" alt="" />
-      <div>
-        <button
-          style={{ width: "100px" }}
-          onClick={() => navigate("/")}
-          className="btn btn-outline-warning"
-        >
-          Home
-        </button>
-      </div>
-    </div>
+    <Container
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <img style={{ width: "75%" }} src={error} alt="404" />
+      <Button
+        variant="outlined"
+        color="error"
+        onClick={() => navigate("/")}
+        sx={{ width: "50%" }}
+      >
+        Home
+      </Button>
+    </Container>
   );
 };
 

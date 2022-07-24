@@ -1,6 +1,6 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
+import { Table } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -54,10 +54,9 @@ const ContactList = () => {
     await updateTodo(updateState, updateID, success, wrong);
     await setOpen(false);
   };
-  // const editId = Math.floor(Math.random() * 10000);
-  // console.log(editId);
+
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden", mt: 6 }}>
+    <Paper sx={{ width: "100%", overflow: "hidden", mt: 3 }}>
       <Typography variant="h5" align="center" mt={4}>
         Contacts
       </Typography>

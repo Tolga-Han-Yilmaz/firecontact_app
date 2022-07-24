@@ -49,7 +49,11 @@ const Navbar = () => {
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           <HomeIcon
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              mr: 1,
+              cursor: "pointer",
+            }}
             onClick={() => navigate("/")}
           />
           <Box
