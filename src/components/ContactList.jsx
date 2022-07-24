@@ -73,9 +73,9 @@ const ContactList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contacts?.map((contact) => {
+            {contacts?.map((contact, index) => {
               return (
-                <TableRow hover tabIndex={-1} key={contact.contact.id}>
+                <TableRow hover tabIndex={-1} key={index}>
                   <TableCell>{contact.contact.name}</TableCell>
                   <TableCell>{contact.contact.phone}</TableCell>
                   <TableCell>{contact.contact.gender}</TableCell>

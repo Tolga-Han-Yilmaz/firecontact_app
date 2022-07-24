@@ -31,7 +31,6 @@ const Navbar = () => {
   };
   const handleLogout = async () => {
     await logout(navigate, success);
-    console.log(user);
     dispatch(setLogout());
   };
 
@@ -127,7 +126,7 @@ const Navbar = () => {
                 </MenuItem>
                 <MenuItem>
                   <Typography textAlign="center">
-                    {user.displayName === null ? "Jond Doe" : user.displayName}
+                    {user.displayName === null ? "John Doe" : user.displayName}
                   </Typography>
                 </MenuItem>
               </Menu>
@@ -182,7 +181,7 @@ const Navbar = () => {
                 Logout
               </Typography>
               <Typography textAlign="center">
-                {user.displayName === null ? "Jond Doe" : user.displayName}
+                {user.displayName === null ? "John Doe" : user.displayName}
               </Typography>
             </Box>
           )}

@@ -86,7 +86,6 @@ export const logout = async (navigate, success) => {
   await signOut(auth);
   navigate("/login");
   success("exit successful");
-  console.log(logout);
   return true;
 };
 
