@@ -1,4 +1,4 @@
-import { useState } from "react";
+import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,10 +6,10 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
-import { deleteTodo, updateTodo } from "../firebase/firebase";
+import { deleteTodo ,updateTodo} from "../firebase/firebase";
 import {
   Typography,
   TextField,
@@ -17,9 +17,11 @@ import {
   MenuItem,
   Dialog,
   DialogActions,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { success } from "../helper/Toasts";
-// import { updatesContacts } from "../redux/reducers/update";
+import { updatesContacts } from "../redux/reducers/update";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import Box from "@mui/material/Box";
@@ -27,35 +29,38 @@ import Button from "@mui/material/Button";
 
 const ContactList = () => {
   const { contacts } = useSelector((state) => state.contacts);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const handleDelete = async (id) => {
     await deleteTodo(id, success);
   };
+  const [updateState, setUpdateState] = React.useState([]);
+  const [updateID,setUpdateID] = React.useState("");
 
-  const handleEdit = (id) => {
-    // const test = contacts.filter((contact) => contact.id === id);
-    setOpen(true);
+  const handleEdit = async (id) => {
+    let dataForUpdate = await contacts.filter((contact) => contact.id === id);
+    console.log(dataForUpdate);
+    await setUpdateState(dataForUpdate[0].contact);
+    await setUpdateID(dataForUpdate[0].id)
+    await dispatch(updatesContacts(updateState));
+    // dispatch(appendUpdates(test));
+    await setOpen(true);
+    // console.log(test);
+    // console.log(contacts[0].id);
+    // console.log(id);
   };
+  console.log(updateState);
+  console.log(updateID);
+  const [open, setOpen] = React.useState(false);
 
-  const [contact, setContact] = useState({
-    name: "",
-    phone: "",
-    gender: "name",
-  });
-
-  const handleChange = (e) => {
-    setContact({ ...contact, [e.target.id]: e.target.value });
-  };
-  const handleSubmitEdit = async (e, id) => {
-    e.preventDefault();
-    await updateTodo(id, contact);
-    setOpen(false);
-    setContact({ name: "", phone: "", gender: "male" });
-  };
-  // dispatch(updatesContacts(contact));
-
-  const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
+  const handleChange = (e) => {
+    setUpdateState({...updateState, [e.target.name] : e.target.value})
+  }
+  const handleUpdate = async(e) => {
+    e.preventDefault();
+    await updateTodo(updateState,updateID)
+    await setOpen(false)
+  }
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", mt: 6 }}>
       <Typography variant="h5" align="center" mt={4}>
@@ -73,9 +78,9 @@ const ContactList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contacts?.map((contact, index) => {
+            {contacts.map((contact) => {
               return (
-                <TableRow hover tabIndex={-1} key={index}>
+                <TableRow hover tabIndex={-1} key={contact.contact.id}>
                   <TableCell>{contact.contact.name}</TableCell>
                   <TableCell>{contact.contact.phone}</TableCell>
                   <TableCell>{contact.contact.gender}</TableCell>
@@ -91,8 +96,14 @@ const ContactList = () => {
                       onClick={() => handleEdit(contact.id)}
                       sx={{ cursor: "pointer" }}
                     />
-                    <Dialog open={open} onClose={handleClose}>
-                      <form onSubmit={handleSubmitEdit}>
+                    <Dialog
+                      open={open}
+                      onClose={handleClose}
+                      sx={{ width: "100%" }}
+                    >
+                      <form
+                      // onSubmit={handleSubmitAdd}
+                      >
                         <Box
                           sx={{
                             display: "flex",
@@ -106,8 +117,9 @@ const ContactList = () => {
                           <TextField
                             id="name"
                             label="name"
+                            name="name"
                             variant="standard"
-                            value={contact.name}
+                            value={updateState.name}
                             onChange={(e) => handleChange(e)}
                             sx={{ width: "100%" }}
                           />
@@ -127,7 +139,8 @@ const ContactList = () => {
                             type="number"
                             id="phone"
                             label="phone"
-                            value={contact.phone}
+                            name="phone"
+                            value={updateState.phone}
                             variant="standard"
                             onChange={(e) => handleChange(e)}
                             sx={{ width: "100%" }}
@@ -140,24 +153,30 @@ const ContactList = () => {
                             mt: 3,
                           }}
                         >
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="gender"
-                            value={contact.gender}
-                            label="gender"
-                            onChange={(e) => handleChange(e)}
-                            sx={{ width: "100%" }}
-                          >
-                            <MenuItem value="male">Male</MenuItem>
-                            <MenuItem value="female">Female</MenuItem>
-                          </Select>
+                          <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">
+                              Gender
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-label"
+                              id="gender"
+                              name="gender"
+                              value={updateState.gender}
+                              label="gender"
+                              onChange={(e) => handleChange(e)}
+                              sx={{ width: "100%" }}
+                            >
+                              <MenuItem value="male">Male</MenuItem>
+                              <MenuItem value="female">Female</MenuItem>
+                            </Select>
+                          </FormControl>
                         </Box>
 
                         <Button
-                          // disabled={!contact.name || !contact.phone}
                           type="submit"
                           variant="contained"
                           sx={{ width: "100%", mt: 3 }}
+                          onClick={handleUpdate}
                         >
                           Add
                         </Button>
