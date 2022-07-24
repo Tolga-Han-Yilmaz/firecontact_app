@@ -37,8 +37,6 @@ const ContactInput = () => {
   };
 
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
-  console.log(contact);
 
   return (
     <Container>

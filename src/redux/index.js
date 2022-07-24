@@ -8,5 +8,9 @@ const store = configureStore({
     contacts: contacts,
     updates: updateReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 export default store;

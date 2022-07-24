@@ -34,7 +34,6 @@ const Navbar = () => {
     console.log(user);
     dispatch(setLogout());
   };
-  console.log(user);
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 

@@ -6,7 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import { deleteTodo, updateTodo } from "../firebase/firebase";
@@ -19,7 +19,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import { success } from "../helper/Toasts";
-import { updatesContacts } from "../redux/reducers/update";
+// import { updatesContacts } from "../redux/reducers/update";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import Box from "@mui/material/Box";
@@ -27,19 +27,14 @@ import Button from "@mui/material/Button";
 
 const ContactList = () => {
   const { contacts } = useSelector((state) => state.contacts);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const handleDelete = async (id) => {
     await deleteTodo(id, success);
   };
 
   const handleEdit = (id) => {
-    const test = contacts.filter((contact) => contact.id === id);
-    // dispatch(appendUpdates(test));
+    // const test = contacts.filter((contact) => contact.id === id);
     setOpen(true);
-    console.log(test);
-    console.log(contacts[0].id);
-    console.log(test[0].contact);
-    console.log(id);
   };
 
   const [contact, setContact] = useState({
@@ -51,23 +46,13 @@ const ContactList = () => {
   const handleChange = (e) => {
     setContact({ ...contact, [e.target.id]: e.target.value });
   };
-  console.log(contact);
   const handleSubmitEdit = async (e, id) => {
     e.preventDefault();
     await updateTodo(id, contact);
-    console.log(id, contact);
     setOpen(false);
-    // await addTodo(
-    //   {
-    //     contact,
-    //     uid: user.uid,
-    //   },
-    //   success,
-    //   wrong
-    // );
     setContact({ name: "", phone: "", gender: "male" });
   };
-  dispatch(updatesContacts(contact));
+  // dispatch(updatesContacts(contact));
 
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -88,7 +73,7 @@ const ContactList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contacts.map((contact) => {
+            {contacts?.map((contact) => {
               return (
                 <TableRow hover tabIndex={-1} key={contact.contact.id}>
                   <TableCell>{contact.contact.name}</TableCell>
