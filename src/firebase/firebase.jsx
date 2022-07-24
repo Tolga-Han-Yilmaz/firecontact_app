@@ -7,6 +7,7 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  updateProfile,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -86,6 +87,7 @@ export const logout = async (navigate, success) => {
   await signOut(auth);
   navigate("/login");
   success("exit successful");
+  console.log(logout);
   return true;
 };
 
@@ -126,12 +128,19 @@ export const addTodo = async (data, success, wrong) => {
   }
 };
 
-export const updateTodo = async (id, contact) => {
-  await updateDoc(doc(db, "contacts", id), {
-    name: "qqq",
-    phone: 143341,
-    gender: "male",
-  });
+export const updateTodo = async (updateState, updateID) => {
+  try {
+    const UpdateRef = doc(db, "contacts", updateID);
+    await updateDoc(UpdateRef, {
+      contact: {
+        name: updateState.name,
+        phone: updateState.phone,
+        gender: updateState.gender,
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 export const deleteTodo = async (id, success) => {
