@@ -23,7 +23,6 @@ import {
 import store from "../redux";
 import { setLogin, setLogout } from "../redux/reducers/auth";
 import { setContacts } from "../redux/reducers/contacts";
-
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -128,15 +127,12 @@ export const addTodo = async (data, success, wrong) => {
   }
 };
 
-export const updateTodo = async (data) => {
-  try {
-    const washingtonRef = doc(db, "contacts", data);
-    await updateDoc(washingtonRef, {
-      capital: true,
-    });
-  } catch (error) {
-    console.log(error.message);
-  }
+export const updateTodo = async (id, contact) => {
+  await updateDoc(doc(db, "contacts", id), {
+    name: "qqq",
+    phone: 143341,
+    gender: "male",
+  });
 };
 
 export const deleteTodo = async (id, success) => {

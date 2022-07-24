@@ -9,13 +9,11 @@ import {
   Typography,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { addTodo, updateTodo } from "../firebase/firebase";
-import { useSelector, useDispatch } from "react-redux";
+import { addTodo } from "../firebase/firebase";
+import { useSelector } from "react-redux";
 import { wrong, success } from "../helper/Toasts";
 
 const ContactInput = () => {
-  const { updates } = useSelector((state) => state.updates);
-  console.log(updates);
   const [contact, setContact] = useState({
     name: "",
     phone: "",
@@ -35,11 +33,12 @@ const ContactInput = () => {
       success,
       wrong
     );
-    setContact({ name: "", phone: "", gender: "male" });
+    // setContact({ name: "", phone: "" });
   };
 
   const { user } = useSelector((state) => state.auth);
   console.log(user);
+  console.log(contact);
 
   return (
     <Container>

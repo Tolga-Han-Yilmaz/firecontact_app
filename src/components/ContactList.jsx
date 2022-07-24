@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { useSelector, useDispatch } from "react-redux";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
-import { deleteTodo } from "../firebase/firebase";
+import { deleteTodo, updateTodo } from "../firebase/firebase";
 import {
   Typography,
   TextField,
@@ -34,15 +34,42 @@ const ContactList = () => {
 
   const handleEdit = (id) => {
     const test = contacts.filter((contact) => contact.id === id);
-    dispatch(updatesContacts(test));
     // dispatch(appendUpdates(test));
     setOpen(true);
     console.log(test);
     console.log(contacts[0].id);
+    console.log(test[0].contact);
     console.log(id);
   };
-  const [open, setOpen] = React.useState(false);
 
+  const [contact, setContact] = useState({
+    name: "",
+    phone: "",
+    gender: "name",
+  });
+
+  const handleChange = (e) => {
+    setContact({ ...contact, [e.target.id]: e.target.value });
+  };
+  console.log(contact);
+  const handleSubmitEdit = async (e, id) => {
+    e.preventDefault();
+    await updateTodo(id, contact);
+    console.log(id, contact);
+    setOpen(false);
+    // await addTodo(
+    //   {
+    //     contact,
+    //     uid: user.uid,
+    //   },
+    //   success,
+    //   wrong
+    // );
+    setContact({ name: "", phone: "", gender: "male" });
+  };
+  dispatch(updatesContacts(contact));
+
+  const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", mt: 6 }}>
@@ -80,9 +107,7 @@ const ContactList = () => {
                       sx={{ cursor: "pointer" }}
                     />
                     <Dialog open={open} onClose={handleClose}>
-                      <form
-                      // onSubmit={handleSubmitAdd}
-                      >
+                      <form onSubmit={handleSubmitEdit}>
                         <Box
                           sx={{
                             display: "flex",
@@ -98,7 +123,7 @@ const ContactList = () => {
                             label="name"
                             variant="standard"
                             value={contact.name}
-                            // onChange={(e) => handleChange(e)}
+                            onChange={(e) => handleChange(e)}
                             sx={{ width: "100%" }}
                           />
                         </Box>
@@ -119,7 +144,7 @@ const ContactList = () => {
                             label="phone"
                             value={contact.phone}
                             variant="standard"
-                            // onChange={(e) => handleChange(e)}
+                            onChange={(e) => handleChange(e)}
                             sx={{ width: "100%" }}
                           />
                         </Box>
@@ -135,7 +160,7 @@ const ContactList = () => {
                             id="gender"
                             value={contact.gender}
                             label="gender"
-                            // onChange={(e) => handleChange(e)}
+                            onChange={(e) => handleChange(e)}
                             sx={{ width: "100%" }}
                           >
                             <MenuItem value="male">Male</MenuItem>
@@ -144,7 +169,7 @@ const ContactList = () => {
                         </Box>
 
                         <Button
-                          disabled={!contact.name || !contact.phone}
+                          // disabled={!contact.name || !contact.phone}
                           type="submit"
                           variant="contained"
                           sx={{ width: "100%", mt: 3 }}
